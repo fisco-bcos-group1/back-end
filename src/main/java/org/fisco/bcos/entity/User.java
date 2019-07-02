@@ -1,62 +1,59 @@
 package org.fisco.bcos.entity;
 
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-@Entity
+// 用户实体，包含三种企业、音乐人、普通用户
+// 每种在合约中的参数名一样，但是代表内容不一样
 public class User {
+    private String name;   //姓名或企业名称
+    private String id;     //身份证号码或者企业编码
+    private String location;    //所在地
+    private String phone;      //联系电话
+    private String email;      //电子邮箱
 
-        @Id
-        @GeneratedValue(strategy= GenerationType.IDENTITY)
-        private Integer id;
-        private String username;
-        private String password;
-        private String telephone;
+    public User(String name,String id,String location, String phone,String email){
+        this.email = email;
+        this.id = id;
+        this.location = location;
+        this.name = name;
+        this.phone = phone;
+    }
 
-        public User() {
+    public String getName(){
+        return this.name;
+    }
 
-        }
-        public User(Integer id, String username, String password, String telephone) {
+    public void setName(String name){
+        this.name = name;
+    }
 
-            this.id = id;
-            this.username = username;
-            this.password = password;
-            this.telephone = telephone;
-        }
+    public String getId(){
+        return id;
+    }
 
-        public Integer getId() {
-            return id;
-        }
-        public void setId(Integer id) {
-            this.id = id;
-        }
-        public String getUsername() {
-            return username;
-        }
-        public void setUsername(String username) {
-            this.username = username;
-        }
-        public String getPassword() {
-            return password;
-        }
-        public void setPassword(String password) {
-            this.password = password;
-        }
-        public String getTelephone() {
-            return telephone;
-        }
-        public void setTelephone(String telephone) {
-            this.telephone = telephone;
-        }
+    public void setId(String id){
+        this.id = id;
+    }
 
+    public String getLocation(){
+        return location;
+    }
 
-        @Override
-        public String toString() {
-            return "User [id=" + id + ", username=" + username + ", password=" + password + ", telephone=" + telephone
-                    + "]";
-        }
+    public void setLocation(String location){
+        this.location = location;
+    }
 
+    public String getPhone(){
+        return phone;
+    }
+
+    public void setPhone(String phone){
+        this.phone = phone;
+    }
+
+    public String getEmail(){
+        return email;
+    }
+
+    public void setEmail(String email){
+        this.email = email;
+    }
 }
