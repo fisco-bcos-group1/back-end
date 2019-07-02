@@ -46,7 +46,10 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	
 	compile	'org.fisco-bcos:web3sdk:2.0.3'
-  compile 'org.projectlombok:lombok:1.18.6'
+    compile 'org.projectlombok:lombok:1.18.6'
+
+    //import for web 
+    compile ("org.springframework.boot:spring-boot-starter-web")
 }
 
 configurations {

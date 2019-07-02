@@ -42,7 +42,7 @@ public class Contract {
         return musicChain;
     }
 
-    //transfer solidity into java
+    //Transfer solidity into java
     public void compileSolFilesToJavaTest() throws IOException {
         File solFileList = new File("src/test/resources/contract");
         File[] solFiles = solFileList.listFiles();
