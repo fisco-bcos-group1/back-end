@@ -43,10 +43,12 @@ public class transfer {
         musicChain.cancelMusic(binhash).send();
     }
 
+    /*
     public String consult(String bin) throws Exception{
         String result = musicChain.consult(bin).send();
         return result;
     }
+    */
 
     public void transferMusic(String to, String binhash) throws Exception{
         musicChain.transferMusic(to,binhash).send();
