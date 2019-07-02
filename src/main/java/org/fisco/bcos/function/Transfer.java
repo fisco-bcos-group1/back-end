@@ -6,8 +6,12 @@ import org.fisco.bcos.web3j.crypto.Credentials;
 import org.fisco.bcos.web3j.protocol.Web3j;
 import org.fisco.bcos.web3j.tx.gas.StaticGasProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 
 // transer function which in the contract into java version
+
 public class Transfer {
 
     @Autowired private Web3j web3j;
@@ -68,7 +72,7 @@ public class Transfer {
        return musicChain.getUserName().send();
     }
 
-    public String getUserid()throws Exception{
+    public static String getUserid()throws Exception{
         return musicChain.getUserId().send();
     }
 
@@ -108,7 +112,7 @@ public class Transfer {
         return musicChain.getMusicPlatormBySearch(name,singer).send();
     }
 
-    //get music modified time 
+    //get music modified time
     public String getMusicModifiedBySearch(String name, String singer)throws Exception{
         return musicChain.getMusicModifiedBySearch(name,singer).send();
     }
