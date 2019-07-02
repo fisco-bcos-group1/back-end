@@ -1,4 +1,4 @@
-package org.fisco.bcos.fuction;
+package org.fisco.bcos.function;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -10,10 +10,7 @@ import org.fisco.bcos.web3j.solidity.compiler.CompilationResult;
 import org.fisco.bcos.web3j.solidity.compiler.SolidityCompiler;
 import org.fisco.bcos.web3j.tx.gas.StaticGasProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import javax.xml.ws.Service;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;

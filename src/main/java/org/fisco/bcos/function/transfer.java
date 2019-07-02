@@ -1,4 +1,4 @@
-package org.fisco.bcos.fuction;
+package org.fisco.bcos.function;
 
 import org.fisco.bcos.constants.GasConstants;
 import org.fisco.bcos.contracts.MusicChain;
@@ -43,12 +43,10 @@ public class transfer {
         musicChain.cancelMusic(binhash).send();
     }
 
-    /*
     public String consult(String bin) throws Exception{
         String result = musicChain.consult(bin).send();
         return result;
     }
-    */
 
     public void transferMusic(String to, String binhash) throws Exception{
         musicChain.transferMusic(to,binhash).send();
