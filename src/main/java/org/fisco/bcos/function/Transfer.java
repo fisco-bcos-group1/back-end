@@ -4,8 +4,13 @@ import org.fisco.bcos.autoconfigure.Web3jConfig;
 import org.fisco.bcos.channel.client.Service;
 import org.fisco.bcos.constants.GasConstants;
 import org.fisco.bcos.contracts.MusicChain;
+import org.fisco.bcos.entity.Music;
+import org.fisco.bcos.entity.Notice;
+import org.fisco.bcos.entity.Record;
+import org.fisco.bcos.entity.User;
 import org.fisco.bcos.web3j.crypto.Credentials;
 import org.fisco.bcos.web3j.crypto.gm.GenCredential;
+import org.fisco.bcos.web3j.precompile.permission.PermissionService;
 import org.fisco.bcos.web3j.protocol.Web3j;
 import org.fisco.bcos.web3j.protocol.channel.ChannelEthereumService;
 import org.fisco.bcos.web3j.tx.gas.StaticGasProvider;
@@ -13,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
 import java.math.BigInteger;
@@ -25,36 +31,46 @@ public class Transfer {
 
     //@Autowired private Web3j web3j;
     //@Autowired private Credentials credentials;
+    //private String privateKey;
     private static MusicChain musicChain;
 
+    public Transfer(){
+    }
+
     // deploy the contraction
-    public Transfer(String privateKey) throws Exception{
+    public void LoadContract(String privateKey,String address) throws Exception{
         // deploy contract
 
         //读取配置文件，sdk与区块链节点建立连接，获取web3j对象
-        ApplicationContext context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
+        //这个配置文件要再调整
+        ApplicationContext context = new ClassPathXmlApplicationContext("src/main/resources/application.yml:application.yml");
         Service service = context.getBean(Service.class);
         service.run();
         ChannelEthereumService channelEthereumService = new ChannelEthereumService();
         channelEthereumService.setChannelService(service);
         channelEthereumService.setTimeout(10000);
         Web3j web3j = Web3j.build(channelEthereumService, service.getGroupId());
+
+        // 这个私钥是管理员的私钥，直接内置，无法修改
         //String privateKey = "b83261efa42895c38c6c2364ca878f43e77f3cddbc922bf57d0d48070f79feb6";
+
         //指定外部账户私钥，用于交易签名
         Credentials credentials = GenCredential.create(privateKey);
 
+        //PermissionService permissionService = new PermissionService(web3j,credentials);
+
         musicChain =
-                MusicChain.deploy(
+                MusicChain.load(
+                        address,
                         web3j,
                         credentials,
                         new StaticGasProvider(
-                                GasConstants.GAS_PRICE, GasConstants.GAS_LIMIT))
-                        .send();
+                                GasConstants.GAS_PRICE, GasConstants.GAS_LIMIT));
         //return musicChain;
     }
 
 
-    public void registerUser(String name,String id, String location, String phone, String email) throws Exception{
+    public void registerUser(String name,String id, String location, String phone, String email)throws Exception{
         //MusicChain musicChain = this.deployContract();
         musicChain.registerUser(name,id,location,phone,email).send();
     }
@@ -209,5 +225,26 @@ public class Transfer {
 
     public boolean getNoticeValid(BigInteger num)throws Exception{
         return musicChain.getNoticeValid(num).send();
+    }
+
+    // test only
+    public User getUser()throws Exception{
+        User user = new User();
+        return user;
+    }
+
+    public Music getMusic()throws Exception{
+        Music music = new Music();
+        return music;
+    }
+
+    public Notice getNotice()throws Exception{
+        Notice notice = new Notice();
+        return notice;
+    }
+
+    public Record getRecord()throws Exception{
+        Record record = new Record();
+        return record;
     }
 }
