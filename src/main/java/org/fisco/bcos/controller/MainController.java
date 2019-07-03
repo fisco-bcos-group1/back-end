@@ -1,6 +1,8 @@
 package org.fisco.bcos.controller;
 
+import org.fisco.bcos.entity.Music;
 import org.fisco.bcos.entity.Result;
+import org.fisco.bcos.entity.User;
 import org.fisco.bcos.function.Transfer;
 import org.fisco.bcos.service.ContractService;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,13 +25,20 @@ public class MainController {
      *搜索
      */
     @RequestMapping("/")
-    public void Search(@RequestParam("musicName") String musicName,
-                       @RequestParam("singer") String singer){
-
+    public Result<Music> Search(@RequestParam("mName") String mName,
+                               @RequestParam("singer") String singer){
+        try {
+            Music music = transfer.searchMusic(mName, singer);
+            return new Result<Music>(1,"歌曲搜索成功",music);
+        }catch(Exception e){
+            e.printStackTrace();
+            return new Result(0,"歌曲搜索失败");
+        }
     }
 
     /**
      * 点击申请授权
+     * 应该是网页跳转，没有数据交互
      */
     @RequestMapping("/")
     public void Authorize(){
@@ -37,13 +46,25 @@ public class MainController {
     }
 
     /**
-     * 点击确定申请授权
+     * 响应确定申请授权
+     * @param music mname # singer # recordTime # applyTime
+     *              需要包含两个时间
+     * @param to  即为该music的owner字段，即版权所有方的地址
+     * @param info applicantName # phone # use # location # length # text # price
+     * @return
      */
+
     @RequestMapping("/")
     public Result ConfirmAuthorize(@RequestParam("music") String music,
-                                   @RequestParam("singer") String singer,
-                                   @RequestParam("")){
-        return new Result<String>(1,"授权成功");
+                                   @RequestParam("to") String to,
+                                   @RequestParam("info") String info){
+        try{
+            transfer.registerNotice(to,music,info);
+            return new Result(1,"提交申请授权成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result(0,"提交申请授权失败");
+        }
     }
 
 }

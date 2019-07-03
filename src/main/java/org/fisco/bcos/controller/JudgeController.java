@@ -1,5 +1,7 @@
 package org.fisco.bcos.controller;
 
+import org.fisco.bcos.entity.Music;
+import org.fisco.bcos.entity.RecordInformation;
 import org.fisco.bcos.entity.Result;
 import org.fisco.bcos.entity.User;
 import org.fisco.bcos.function.Transfer;
@@ -35,12 +37,20 @@ public class JudgeController {
 
     /**
      * 版权查询
+     * 响应点击搜索按钮
      */
     @RequestMapping("/")
-    public void SearchingRecord(@RequestParam("musicName") String musicName,
-                                @RequestParam("singer") String singer){
-
-
+    public Result<RecordInformation> SearchingRecord(@RequestParam("musicName") String musicName,
+                                                     @RequestParam("singer") String singer){
+        try{
+            Music music = transfer.searchMusic(musicName, singer);
+            User user = transfer.getUserByAddress(music.getOwner());
+            RecordInformation recordInformation = new RecordInformation(music,user);
+            return new Result<RecordInformation>(1,"搜索版权信息成功",recordInformation);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result(0,"搜索版权信息失败");
+        }
     }
 
     /**

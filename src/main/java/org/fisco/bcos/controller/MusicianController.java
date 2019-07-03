@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 用于响应音乐人界面
  */
 @RestController
-public class MusicerController {
+public class MusicianController {
     //String privateKey = "b83261efa42895c38c6c2364ca878f43e77f3cddbc922bf57d0d48070f79feb6";
     String privateKey = LoginController.getPrivateKey();
     Transfer transfer = ContractService.getTransfer(privateKey);
@@ -27,7 +27,7 @@ public class MusicerController {
      * @throws Exception
      */
     @RequestMapping("/")
-    public Result<String> RegisterMusican(@RequestParam("name") String name,
+    public Result<String> RegisterMusician(@RequestParam("name") String name,
                                   @RequestParam("id") String id,
                                   @RequestParam("location") String location,
                                   @RequestParam("phone") String phone,

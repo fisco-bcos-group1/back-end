@@ -7,7 +7,11 @@ import org.fisco.bcos.entity.User;
 import org.fisco.bcos.function.Transfer;
 import org.fisco.bcos.service.ContractService;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.math.BigInteger;
+import java.util.List;
 
 
 /**
@@ -30,7 +34,8 @@ public class UserController {
         try{
             User user = transfer.getUser();
             return new Result<User>(1,"用户信息返回成功",user);
-        }catch (Exception e){
+        }
+        catch (Exception e){
             e.printStackTrace();
             return new Result(0,"用户信息返回失败");
         }
@@ -39,7 +44,13 @@ public class UserController {
 
     // 授权订单
     @RequestMapping("/")
-    public Result<Notice> Authorize(){
+    public Result<List<Notice>> Authorize(){
+        try{
+            List list = transfer.getNoticeNumberByStart("delete tommor");
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result(0,"查询授权订单失败");
+        }
 
     }
 
@@ -49,10 +60,24 @@ public class UserController {
 
     }
 
+    /**
+     * 用于响应登记版权
+     * @param bin 记录音乐二进制文件的hash
+     * @param mname
+     * @param alltime 所有时间，beg_time # end_time # modified
+     */
     //登记版权
     @RequestMapping("/")
-    public void RecordRegister(){
-
+    public Result RecordRegister(@RequestParam("bin") String bin,
+                               @RequestParam("mname") String mname,
+                               @RequestParam("alltime")String alltime){
+        try{
+            transfer.registerMusic(bin,mname,alltime);
+            return new Result(1,"版权登革成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result(0,"版权登记失败")；
+        }
     }
 
     // 版权转让
@@ -64,7 +89,9 @@ public class UserController {
     // 授权申请
     @RequestMapping("/")
     public void RecordApply(){
-
+        try{
+            List<BigInteger> list = transfer.getNoticeNumberByTO("delete tommorrow");
+        }
     }
 
     // 版权共享

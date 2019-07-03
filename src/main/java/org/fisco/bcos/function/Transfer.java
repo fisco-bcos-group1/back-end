@@ -239,7 +239,7 @@ public class Transfer {
      */
 
     // test only
-    public User getUser(){
+    public User getUser()throws Exception{
         User user = new User();
         Tuple6<String, String, String, String, String, String> temp = musicChain.getUser().send();
         user.setName(temp.getValue1());
@@ -299,6 +299,34 @@ public class Transfer {
 
     public List getRecordNumber(String user, String author)throws Exception{
         return musicChain.getRecordNumber(user,author).send();
+    }
+
+    //7.3晚上新加
+    public Music searchMusic(String mname, String singer)throws Exception{
+        Music music = new Music();
+        Tuple5<String, String, String, String, String> temp = musicChain.searchMusic(mname,singer).send();
+        music.setOwner(temp.getValue1());
+        music.setBin(temp.getValue2());
+        music.setmName(temp.getValue3());
+        music.setSinger(temp.getValue4());
+        music.setAlltime(temp.getValue5());
+        return music;
+    }
+
+    public User getUserByAddress(String address) throws Exception{
+        User user = new User();
+        Tuple6<String, String, String, String, String, String> temp = musicChain.getUserByAddress(address).send();
+        user.setName(temp.getValue1());
+        user.setType(temp.getValue2());
+        user.setId(temp.getValue3());
+        user.setLocation(temp.getValue4());
+        user.setPhone(temp.getValue5());
+        user.setEmail(temp.getValue6());
+        return user;
+    }
+
+    public void consumeNotice(BigInteger number)throws Exception{
+        musicChain.consumeNotice(number);
     }
 
 }
