@@ -1,6 +1,8 @@
 package org.fisco.bcos.controller;
 
+import org.fisco.bcos.entity.Notice;
 import org.fisco.bcos.entity.Record;
+import org.fisco.bcos.entity.Result;
 import org.fisco.bcos.entity.User;
 import org.fisco.bcos.function.Transfer;
 import org.fisco.bcos.service.ContractService;
@@ -24,22 +26,21 @@ public class UserController {
     // 用户信息
     // 可用于企业、音乐人、普通用户
     @RequestMapping("/")
-    public User enterpriseInformation(){
-        User user = new User();
-        try {
-            user = transfer.getUser();
-            return user;
+    public Result<User> enterpriseInformation(){
+        try{
+            User user = transfer.getUser();
+            return new Result<User>(1,"用户信息返回成功",user);
         }catch (Exception e){
-            return new User();
+            e.printStackTrace();
+            return new Result(0,"用户信息返回失败");
         }
     }
 
 
     // 授权订单
     @RequestMapping("/")
-    public String Authorize(){
+    public Result<Notice> Authorize(){
 
-        return "1";
     }
 
     // 版权音乐

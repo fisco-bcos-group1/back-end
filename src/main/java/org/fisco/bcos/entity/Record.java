@@ -7,18 +7,61 @@ package org.fisco.bcos.entity;
  */
 public class Record {
 
-    private String name;
-    private String phoneNumber;
+    private String user;   // 被授权人地址
+    private String author;   // 授权人/版权拥有人地址
+    private String alltime;  // 所有时间，beg_time # end_time # modified
+    private String music;   // bin # mname # singer # owner
+    private String info;      // applicantName # phone # use # location # length # text # price
 
     public Record() {
     }
 
-
-    public Record(String name, String phoneNumber){
-        this.name = name;
-        this.phoneNumber = phoneNumber;
+    public Record(String user, String author, String alltime, String music, String info) {
+        this.user = user;
+        this.author = author;
+        this.alltime = alltime;
+        this.music = music;
+        this.info = info;
     }
 
-    public String getName(){return this.name;}
-    public String getPhoneNumber(){return phoneNumber;}
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getAlltime() {
+        return alltime;
+    }
+
+    public void setAlltime(String alltime) {
+        this.alltime = alltime;
+    }
+
+    public String getMusic() {
+        return music;
+    }
+
+    public void setMusic(String music) {
+        this.music = music;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
 }

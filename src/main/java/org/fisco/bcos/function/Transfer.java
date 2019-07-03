@@ -1,6 +1,6 @@
 package org.fisco.bcos.function;
 
-import org.fisco.bcos.autoconfigure.Web3jConfig;
+import lombok.Data;
 import org.fisco.bcos.channel.client.Service;
 import org.fisco.bcos.constants.GasConstants;
 import org.fisco.bcos.contracts.MusicChain;
@@ -10,16 +10,13 @@ import org.fisco.bcos.entity.Record;
 import org.fisco.bcos.entity.User;
 import org.fisco.bcos.web3j.crypto.Credentials;
 import org.fisco.bcos.web3j.crypto.gm.GenCredential;
-import org.fisco.bcos.web3j.precompile.permission.PermissionService;
 import org.fisco.bcos.web3j.protocol.Web3j;
 import org.fisco.bcos.web3j.protocol.channel.ChannelEthereumService;
+import org.fisco.bcos.web3j.tuples.generated.Tuple5;
+import org.fisco.bcos.web3j.tuples.generated.Tuple6;
 import org.fisco.bcos.web3j.tx.gas.StaticGasProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -27,6 +24,8 @@ import java.util.List;
 
 // transer function which in the contract into java version
 
+//不太清楚这个data注释有没有用
+@Data
 public class Transfer {
 
     //@Autowired private Web3j web3j;
@@ -69,43 +68,51 @@ public class Transfer {
         //return musicChain;
     }
 
-
-    public void registerUser(String name,String id, String location, String phone, String email)throws Exception{
-        //MusicChain musicChain = this.deployContract();
-        musicChain.registerUser(name,id,location,phone,email).send();
+    // normal user register
+    public void registerUser(String name, String phone)throws Exception{
+        musicChain.registerUser(name,phone).send();
     }
 
-    public void registerMusic(String bin, String name) throws Exception{
-        musicChain.registerMusic(bin,name).send();
+    // company register
+    public void registerCompany(String name, String phone, String id, String location, String email)throws Exception{
+        musicChain.registerCompany(name,id,location,phone,email).send();
     }
 
-    public void cancelMusic(String binhash) throws Exception{
-        musicChain.cancelMusic(binhash).send();
+    // musician register
+    public void registerMusician(String name, String phone, String id, String location, String email)throws Exception{
+        musicChain.registerMusician(name, id, location, phone, email).send();
     }
 
-    public void registerNotice(String to, String text){
-        musicChain.registerNotice(to,text);
+    // judge register
+    public void registerJudge(String name, String phone, String id, String location, String email)throws Exception{
+        musicChain.registerJudge(name, id, location, phone, email).send();
     }
+
+    //music register
+    public void registerMusic(String bin, String mname, String alltime) throws Exception{
+        musicChain.registerMusic(bin,mname,alltime).send();
+    }
+
+    public void cancelMusic(String binhash,String alltime) throws Exception{
+        musicChain.cancelMusic(binhash,alltime).send();
+    }
+
+    public void registerNotice(String to, String music, String info){
+        musicChain.registerNotice(to,music,info);
+    }
+
+    public void transferMusic(String to, String binhash, String alltime) throws Exception{
+        musicChain.transferMusic(to,binhash,alltime).send();
+    }
+
+    public void authorizeMusic(String to, String binhash, String alltime, String music, String info) throws Exception{
+        musicChain.authorizeMusic(to,binhash,alltime,music,info).send();
+    }
+
 
     /*
-    public static String consult(String bin) throws Exception{
-        String result = musicChain.consult(bin).send();
-        return result;
-    }
+     分别获取UserEntity中的所有参数
 
-     */
-
-    public void transferMusic(String to, String binhash) throws Exception{
-        musicChain.transferMusic(to,binhash).send();
-    }
-
-    public void authorizeMusic(String to, String binhash) throws Exception{
-        musicChain.authorizeMusic(to,binhash).send();
-    }
-
-    /**
-     * 分别获取UserEntity中的所有参数
-     */
     public String getUserName()throws Exception{
        return musicChain.getUserName().send();
     }
@@ -125,10 +132,11 @@ public class Transfer {
     public String getUserEmail() throws Exception{
         return musicChain.getUserEmail().send();
     }
+    */
 
-    /**
-     * 分别获取Music中的所有参数
-     */
+    /*
+    分别获取Music中的所有参数
+
     public String getMusicOwnerBySearch(String name, String singer) throws Exception{
         return musicChain.getMusicOwnerBySearch(name,singer).send();
     }
@@ -161,10 +169,10 @@ public class Transfer {
     public boolean getMusicIsvalidBySearch(String name, String singer)throws Exception{
         return musicChain.getMusicIsvalidBySearch(name,singer).send();
     }
+    */
 
-    /**
-     * 分别获取Record中的所有参数
-     */
+    /*
+    分别获取Record中的所有参数
 
     // 返回所有与该账户有关的recordnumber
     // 这里对list的类型定义不确定
@@ -200,9 +208,10 @@ public class Transfer {
         return musicChain.getRecordModified(num).send();
     }
 
-    /**
-     * 分别返回Notice的所有参数
      */
+
+    /*
+     分别返回Notice的所有参数
     public List getNoticeNumber(String address)throws Exception{
         return musicChain.getRecordNumber(address).send();
     }
@@ -227,24 +236,69 @@ public class Transfer {
         return musicChain.getNoticeValid(num).send();
     }
 
+     */
+
     // test only
-    public User getUser()throws Exception{
+    public User getUser(){
         User user = new User();
+        Tuple6<String, String, String, String, String, String> temp = musicChain.getUser().send();
+        user.setName(temp.getValue1());
+        user.setType(temp.getValue2());
+        user.setId(temp.getValue3());
+        user.setLocation(temp.getValue4());
+        user.setPhone(temp.getValue5());
+        user.setEmail(temp.getValue6());
         return user;
     }
 
-    public Music getMusic()throws Exception{
+    public Music getMusic(BigInteger number)throws Exception{
         Music music = new Music();
+        Tuple6<String, String, String, String, Boolean, String> temp = musicChain.getMusic(number).send();
+        music.setOwner(temp.getValue1());
+        music.setBin(temp.getValue2());
+        music.setmName(temp.getValue3());
+        music.setSinger(temp.getValue4());
+        music.setValid(temp.getValue5());
+        music.setAlltime(temp.getValue6());
         return music;
     }
 
-    public Notice getNotice()throws Exception{
+    public List getMusicNumber(String mname, String singer)throws Exception{
+        return musicChain.getMusicNumber(mname,singer).send();
+    }
+
+    public Notice getNotice(BigInteger number)throws Exception{
         Notice notice = new Notice();
+        Tuple5<String, String, String, String, Boolean> temp = musicChain.getNotice(number).send();
+        notice.setStart(temp.getValue1());
+        notice.setTo(temp.getValue2());
+        notice.setMusic(temp.getValue3());
+        notice.setInfo(temp.getValue4());
+        notice.setValid(temp.getValue5());
         return notice;
     }
 
-    public Record getRecord()throws Exception{
+    public List getNoticeNumberByStart(String start)throws Exception{
+        return musicChain.getNoticeNumberByStart(start).send();
+    }
+
+    public List getNoticeNumberByTO(String to)throws Exception{
+        return musicChain.getNoticeNumberByTo(to).send();
+    }
+
+    public Record getRecord(BigInteger number)throws Exception{
         Record record = new Record();
+        Tuple5<String, String, String, String, String> temp = musicChain.getRecord(number).send();
+        record.setUser(temp.getValue1());
+        record.setAuthor(temp.getValue2());
+        record.setAlltime(temp.getValue3());
+        record.setMusic(temp.getValue4());
+        record.setInfo(temp.getValue5());
         return record;
     }
+
+    public List getRecordNumber(String user, String author)throws Exception{
+        return musicChain.getRecordNumber(user,author).send();
+    }
+
 }

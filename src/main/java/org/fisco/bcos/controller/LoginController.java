@@ -37,7 +37,7 @@ public class LoginController {
     @RequestMapping("/")
     public Result Login(@RequestParam("privateKey") String privatekey){
         privateKey = privatekey;
-        return new Result(true,"登陆成功");
+        return new Result(1,"登陆成功");
     }
 
 }

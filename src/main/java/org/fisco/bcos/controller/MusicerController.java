@@ -26,18 +26,18 @@ public class MusicerController {
      * @param email
      * @throws Exception
      */
-    @RequestMapping("/registerMusicer")
-    public Result RegisterMusicer(@RequestParam("name") String name,
+    @RequestMapping("/")
+    public Result<String> RegisterMusican(@RequestParam("name") String name,
                                   @RequestParam("id") String id,
                                   @RequestParam("location") String location,
                                   @RequestParam("phone") String phone,
                                   @RequestParam("email") String email){
         try{
-            transfer.registerUser(name,id,location,phone,email);
-            return new Result(true,"音乐人注册成功");
+            transfer.registerMusician(name,phone,id,location,email);
+            return new Result<String>(1,"音乐人注册成功",null);
         }catch (Exception e){
             e.printStackTrace();
-            return new Result(false,"音乐人注册失败");
+            return new Result<String>(0,"音乐人注册失败",null);
         }
     }
 }
