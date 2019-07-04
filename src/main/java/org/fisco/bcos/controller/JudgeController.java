@@ -42,7 +42,7 @@ public class JudgeController {
      * 响应点击搜索按钮
      */
     @RequestMapping("/api/3")
-    public Result<RecordInformation> SearchingRecord(@RequestParam("musicName") String musicName,
+    public Result SearchingRecord(@RequestParam("musicName") String musicName,
                                                      @RequestParam("singer") String singer,
                                                      @RequestParam("privateKey") String privateKey){
         try{
@@ -50,7 +50,7 @@ public class JudgeController {
             Music music = transfer.searchMusic(musicName, singer);
             User user = transfer.getUserByAddress(music.getOwner());
             RecordInformation recordInformation = new RecordInformation(music,user);
-            return new Result<RecordInformation>(1,"搜索版权信息成功",recordInformation);
+            return new Result(1,"搜索版权信息成功",recordInformation);
         }catch (Exception e){
             e.printStackTrace();
             return new Result(0,"搜索版权信息失败");
@@ -69,11 +69,11 @@ public class JudgeController {
      * 机构信息
      */
     @RequestMapping("/api/4")
-    public Result<User> JudgeInformation(@RequestParam("privateKey") String privateKey){
+    public Result JudgeInformation(@RequestParam("privateKey") String privateKey){
         try{
             Transfer transfer = ContractService.getTransfer(privateKey);
             User user = transfer.getUser();
-            return new Result<User>(1,"机构信息返回成功",user);
+            return new Result(1,"机构信息返回成功",user);
         }catch (Exception e){
             e.printStackTrace();
             return new Result(0,"机构信息返回失败");

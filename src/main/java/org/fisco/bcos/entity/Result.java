@@ -2,7 +2,7 @@ package org.fisco.bcos.entity;
 
 import java.io.Serializable;
 
-public class Result<T> implements Serializable {
+public class Result implements Serializable {
 
     //判断结果
     /**
@@ -15,7 +15,7 @@ public class Result<T> implements Serializable {
     //返回信息
     private String message;
 
-    private T data;
+    private Object data;
 
     //private Object data;
 
@@ -29,7 +29,7 @@ public class Result<T> implements Serializable {
     }
 
 
-    public Result(int success,String message, T obj){
+    public Result(int success,String message, Object obj){
         this.success = success;
         this.message =message;
         this.data = obj;
@@ -43,7 +43,7 @@ public class Result<T> implements Serializable {
 
     public void setMessage(String message){this.message = message;}
 
-    //public Object getData(){return data;}
+    public Object getData(){return data;}
 
-    //public void setData(Object data){this.data = data;}
+    public void setData(Object data){this.data = data;}
 }

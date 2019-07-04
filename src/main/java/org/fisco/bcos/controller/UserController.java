@@ -28,11 +28,11 @@ public class UserController {
     // 用户信息
     // 可用于企业、音乐人、普通用户
     @RequestMapping("/api/11")
-    public Result<User> enterpriseInformation(@RequestParam("privateKey") String privateKey){
+    public Result enterpriseInformation(@RequestParam("privateKey") String privateKey){
         try{
             Transfer transfer = ContractService.getTransfer(privateKey);
             User user = transfer.getUser();
-            return new Result<User>(1,"用户信息返回成功",user);
+            return new Result(1,"用户信息返回成功",user);
         }
         catch (Exception e){
             e.printStackTrace();
@@ -48,7 +48,7 @@ public class UserController {
     // 显示由我发出的所有Notice
     // 这里的list循坏不知道能不能成功，因为返回的只是list，我并不知道数据的具体类型
     @RequestMapping("/api/12")
-    public Result<List<Notice>> ShowNoticeStartByMe(@RequestParam("privateKey") String privateKey){
+    public Result ShowNoticeStartByMe(@RequestParam("privateKey") String privateKey){
         try{
             Transfer transfer = ContractService.getTransfer(privateKey);
             List<Notice> result = new ArrayList<Notice>();
@@ -57,7 +57,7 @@ public class UserController {
             for (int i = 0; i<size;++i){
                 result.add(transfer.getNotice(list.get(i)));
             }
-            return new Result<List<Notice>>(1,"获取所有notice成功",result);
+            return new Result(1,"获取所有notice成功",result);
         }catch (Exception e){
             e.printStackTrace();
             return new Result(0,"获取所有Notice失败");
@@ -75,7 +75,7 @@ public class UserController {
      * @return
      */
     @RequestMapping("/api/13")
-    public Result<List<Music>> ShowMuiscOwnedByMe(@RequestParam("privateKey") String privateKey){
+    public Result ShowMuiscOwnedByMe(@RequestParam("privateKey") String privateKey){
         try{
             Transfer transfer = ContractService.getTransfer(privateKey);
             List<Music>  result = new ArrayList<Music> ();
@@ -84,7 +84,7 @@ public class UserController {
             for (int i = 0; i<size;++i){
                 result.add(transfer.getMusic(list.get(i)));
             }
-            return new Result<List<Music>>(1,"获取所有我的音乐成功",result);
+            return new Result(1,"获取所有我的音乐成功",result);
         }catch (Exception e){
             e.printStackTrace();
             return new Result(0,"获取所有我的音乐失败");
@@ -168,7 +168,7 @@ public class UserController {
      * @return
      */
     @RequestMapping("/api/17")
-    public Result<List<Notice>> ShowNotice(@RequestParam("privateKey")String privateKey){
+    public Result ShowNotice(@RequestParam("privateKey")String privateKey){
         try{
             Transfer transfer = ContractService.getTransfer(privateKey);
             List<Notice> result = new ArrayList<Notice>();
@@ -177,7 +177,7 @@ public class UserController {
             for (int i = 0; i<size;++i){
                 result.add(transfer.getNotice(list.get(i)));
             }
-            return new Result<List<Notice>>(1,"获取所有notice成功",result);
+            return new Result(1,"获取所有notice成功",result);
         }catch (Exception e){
             e.printStackTrace();
             return new Result(0,"获取所有Notice失败");

@@ -27,7 +27,7 @@ public class MusicianController {
      * @throws Exception
      */
     @RequestMapping("/api/10")
-    public Result<String> RegisterMusician(@RequestParam("name") String name,
+    public Result RegisterMusician(@RequestParam("name") String name,
                                   @RequestParam("id") String id,
                                   @RequestParam("location") String location,
                                   @RequestParam("phone") String phone,
@@ -36,10 +36,10 @@ public class MusicianController {
         try{
             Transfer transfer = ContractService.getTransfer(privateKey);
             transfer.registerMusician(name,phone,id,location,email);
-            return new Result<String>(1,"音乐人注册成功",null);
+            return new Result(1,"音乐人注册成功",null);
         }catch (Exception e){
             e.printStackTrace();
-            return new Result<String>(0,"音乐人注册失败",null);
+            return new Result(0,"音乐人注册失败",null);
         }
     }
 }

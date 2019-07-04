@@ -32,9 +32,16 @@ public class LoginController {
     @RequestMapping("/api/5")
     public List<String> Register(@RequestParam("name") String name,
                                  @RequestParam("phone") String phone){
-        log.info("name:" + name);
-        log.info("phone:" + phone);
-        return CreateUser.createRomdonUser();
+        List<String> result = CreateUser.createRomdonUser();
+        try{
+            Transfer transfer = ContractService.getTransfer(result.get(0));
+            transfer.registerUser(name, phone);
+
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -48,10 +55,10 @@ public class LoginController {
             Transfer transfer = ContractService.getTransfer(privateKey);
             User user = transfer.getUser();
             log.info(user.getName());
-            return new Result<User>(1,"登陆成功", user);
+            return new Result(1,"登陆成功", user);
         }catch (Exception e){
             e.printStackTrace();
-            return new Result(0,e.getMessage());
+            return new Result(0, e.getMessage());
         }
     }
 

@@ -84,7 +84,7 @@ public class Transfer {
 
         //指定外部账户私钥，用于交易签名
         Credentials credentials = GenCredential.create(privateKey);
-
+        log.info(credentials.toString());
         //PermissionService permissionService = new PermissionService(web3j,credentials);
 
         musicChain =

@@ -25,13 +25,13 @@ public class MainController {
      *搜索
      */
     @RequestMapping("/api/7")
-    public Result<Music> Search(@RequestParam("mName") String mName,
+    public Result Search(@RequestParam("mName") String mName,
                                @RequestParam("singer") String singer,
                                 @RequestParam("privateKey") String privateKey){
         try {
             Transfer transfer = ContractService.getTransfer(privateKey);
             Music music = transfer.searchMusic(mName, singer);
-            return new Result<Music>(1,"歌曲搜索成功",music);
+            return new Result(1,"歌曲搜索成功",music);
         }catch(Exception e){
             e.printStackTrace();
             return new Result(0,"歌曲搜索失败");
