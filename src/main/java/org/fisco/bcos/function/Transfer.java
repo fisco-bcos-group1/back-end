@@ -42,7 +42,7 @@ public class Transfer {
 
         //读取配置文件，sdk与区块链节点建立连接，获取web3j对象
         //这个配置文件要再调整
-        ApplicationContext context = new ClassPathXmlApplicationContext("src/main/resources/application.yml:application.yml");
+        ApplicationContext context = new ClassPathXmlApplicationContext("resources/application.yml");
         Service service = context.getBean(Service.class);
         service.run();
         ChannelEthereumService channelEthereumService = new ChannelEthereumService();
@@ -263,8 +263,8 @@ public class Transfer {
         return music;
     }
 
-    public List getMusicNumber(String mname, String singer)throws Exception{
-        return musicChain.getMusicNumber(mname,singer).send();
+    public List getMusicNumber()throws Exception{
+        return musicChain.getMusicNumber().send();
     }
 
     public Notice getNotice(BigInteger number)throws Exception{
@@ -278,12 +278,12 @@ public class Transfer {
         return notice;
     }
 
-    public List getNoticeNumberByStart(String start)throws Exception{
-        return musicChain.getNoticeNumberByStart(start).send();
+    public List getNoticeNumberByStart()throws Exception{
+        return musicChain.getNoticeNumberByStart().send();
     }
 
-    public List getNoticeNumberByTO(String to)throws Exception{
-        return musicChain.getNoticeNumberByTo(to).send();
+    public List getNoticeNumberByTO()throws Exception{
+        return musicChain.getNoticeNumberByTo().send();
     }
 
     public Record getRecord(BigInteger number)throws Exception{
