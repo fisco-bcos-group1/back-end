@@ -5,5 +5,5 @@ public class KeyConstants {
     public static final String PRIVATE_KEY = "1";
 
     //合约地址
-    public static final String ADDRESS = "1";
+    public static final String ADDRESS = "0x12a04cdd2eaf5151a11af62793bfda9455622339";
 }

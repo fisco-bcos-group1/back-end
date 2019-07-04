@@ -42,7 +42,7 @@ public class Transfer {
 
         //读取配置文件，sdk与区块链节点建立连接，获取web3j对象
         //这个配置文件要再调整
-        ApplicationContext context = new ClassPathXmlApplicationContext("resources/application.yml");
+        ApplicationContext context = new ClassPathXmlApplicationContext("src/main/resources/application.xml");
         Service service = context.getBean(Service.class);
         service.run();
         ChannelEthereumService channelEthereumService = new ChannelEthereumService();
