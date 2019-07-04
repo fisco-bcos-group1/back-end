@@ -8,10 +8,12 @@ import org.fisco.bcos.function.Transfer;
 import org.fisco.bcos.service.ContractService;
 import org.fisco.bcos.service.CreateUser;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class JudgeController {
@@ -21,13 +23,15 @@ public class JudgeController {
     /**
      * 响应申请认证仲裁机构
      */
-    @RequestMapping("/api/2")
-    public Result Register(@RequestParam("name") String name,
-                           @RequestParam("location") String location,
-                           @RequestParam("phone") String phone,
-                           @RequestParam("email") String email,
-                           @RequestParam("privateKey") String privateKey){
+    @RequestMapping("/api/judge/apply")
+    public Result Register(@RequestBody Map<String,Object> request){
         try{
+            String name = (String)request.get("name");
+            String id = (String)request.get("id");
+            String location = (String)request.get("location");
+            String phone = (String)request.get("phone");
+            String email = (String)request.get("email");
+            String privateKey = (String)request.get("privateKey");
             Transfer transfer = ContractService.getTransfer(privateKey);
             transfer.registerJudge(name, "", location, phone, email);
             return new Result(1,"仲裁机构认证成功");
@@ -41,11 +45,12 @@ public class JudgeController {
      * 版权查询
      * 响应点击搜索按钮
      */
-    @RequestMapping("/api/3")
-    public Result SearchingRecord(@RequestParam("musicName") String musicName,
-                                                     @RequestParam("singer") String singer,
-                                                     @RequestParam("privateKey") String privateKey){
+    @RequestMapping("/api/judge/search")
+    public Result SearchingRecord(@RequestBody Map<String,Object> request){
         try{
+            String musicName = (String)request.get("musicName");
+            String singer = (String)request.get("singer");
+            String privateKey = (String)request.get("privateKey");
             Transfer transfer = ContractService.getTransfer(privateKey);
             Music music = transfer.searchMusic(musicName, singer);
             User user = transfer.getUserByAddress(music.getOwner());
@@ -60,7 +65,7 @@ public class JudgeController {
     /**
      * 历史记录
      */
-    @RequestMapping("/")
+    @RequestMapping("/api/judge/history")
     public void SearchHistory(){
 
     }
@@ -68,9 +73,10 @@ public class JudgeController {
     /**
      * 机构信息
      */
-    @RequestMapping("/api/4")
-    public Result JudgeInformation(@RequestParam("privateKey") String privateKey){
+    @RequestMapping("/api/judge/info")
+    public Result JudgeInformation(@RequestBody Map<String,String> request){
         try{
+            String privateKey = request.get("privateKey");
             Transfer transfer = ContractService.getTransfer(privateKey);
             User user = transfer.getUser();
             return new Result(1,"机构信息返回成功",user);

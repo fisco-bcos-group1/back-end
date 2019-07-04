@@ -5,9 +5,12 @@ import org.fisco.bcos.entity.Result;
 import org.fisco.bcos.entity.User;
 import org.fisco.bcos.function.Transfer;
 import org.fisco.bcos.service.ContractService;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 /**
  * 响应音乐区，即index
@@ -25,10 +28,11 @@ public class MainController {
      *搜索
      */
     @RequestMapping("/api/search")
-    public Result Search(@RequestParam("mName") String mName,
-                               @RequestParam("singer") String singer,
-                                @RequestParam("privateKey") String privateKey){
+    public Result Search(@RequestBody Map<String,Object> request){
         try {
+            String mName = (String)request.get("mName");
+            String singer = (String)request.get("singer");
+            String privateKey = (String)request.get("privateKey");
             Transfer transfer = ContractService.getTransfer(privateKey);
             Music music = transfer.searchMusic(mName, singer);
             return new Result(1,"歌曲搜索成功",music);
@@ -49,19 +53,20 @@ public class MainController {
 
     /**
      * 响应确定申请授权
-     * @param music mname # singer # recordTime # applyTime
-     *              需要包含两个时间
-     * @param to  即为该music的owner字段，即版权所有方的地址
-     * @param info applicantName # phone # use # location # length # text # price
+     * music mname # singer # recordTime # applyTime
+     *       需要包含两个时间
+     * to  即为该music的owner字段，即版权所有方的地址
+     * info applicantName # phone # use # location # length # text # price
      * @return
      */
 
     @RequestMapping("/api/apply")
-    public Result ConfirmAuthorize(@RequestParam("music") String music,
-                                   @RequestParam("to") String to,
-                                   @RequestParam("info") String info,
-                                   @RequestParam("privateKey") String privateKey){
+    public Result ConfirmAuthorize(@RequestBody Map<String,Object> request){
         try{
+            String music = (String)request.get("music");
+            String to = (String)request.get("to");
+            String info = (String)request.get("info");
+            String privateKey = (String)request.get("privateKey");
             Transfer transfer = ContractService.getTransfer(privateKey);
             transfer.registerNotice(to,music,info);
             return new Result(1,"提交申请授权成功");
