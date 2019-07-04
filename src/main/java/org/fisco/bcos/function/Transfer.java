@@ -15,7 +15,9 @@ import org.fisco.bcos.web3j.protocol.channel.ChannelEthereumService;
 import org.fisco.bcos.web3j.tuples.generated.Tuple5;
 import org.fisco.bcos.web3j.tuples.generated.Tuple6;
 import org.fisco.bcos.web3j.tx.gas.StaticGasProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.math.BigInteger;
@@ -25,10 +27,11 @@ import java.util.List;
 // transer function which in the contract into java version
 
 //不太清楚这个data注释有没有用
-@Data
+@Configuration
 public class Transfer {
 
     //@Autowired private Web3j web3j;
+    @Autowired private Service service;
     //@Autowired private Credentials credentials;
     //private String privateKey;
     private static MusicChain musicChain;
@@ -42,16 +45,14 @@ public class Transfer {
 
         //读取配置文件，sdk与区块链节点建立连接，获取web3j对象
         //这个配置文件要再调整
-        ApplicationContext context = new ClassPathXmlApplicationContext("src/main/resources/application.xml");
-        Service service = context.getBean(Service.class);
+        //ApplicationContext context = new ClassPathXmlApplicationContext("src/main/resources/application.xml");
+        //Service service = context.getBean(Service.class);
+        //Service service = new Service();
         service.run();
         ChannelEthereumService channelEthereumService = new ChannelEthereumService();
         channelEthereumService.setChannelService(service);
         channelEthereumService.setTimeout(10000);
         Web3j web3j = Web3j.build(channelEthereumService, service.getGroupId());
-
-        // 这个私钥是管理员的私钥，直接内置，无法修改
-        //String privateKey = "b83261efa42895c38c6c2364ca878f43e77f3cddbc922bf57d0d48070f79feb6";
 
         //指定外部账户私钥，用于交易签名
         Credentials credentials = GenCredential.create(privateKey);

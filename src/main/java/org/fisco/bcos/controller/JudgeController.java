@@ -15,18 +15,20 @@ import java.util.List;
 
 @Controller
 public class JudgeController {
-    String privateKey = LoginController.getPrivateKey();
-    Transfer transfer = ContractService.getTransfer(privateKey);
+    //String privateKey = LoginController.getPrivateKey();
+    //Transfer transfer = ContractService.getTransfer(privateKey);
 
     /**
      * 响应申请认证仲裁机构
      */
-    @RequestMapping("/")
+    @RequestMapping("/api/2")
     public Result Register(@RequestParam("name") String name,
                            @RequestParam("location") String location,
                            @RequestParam("phone") String phone,
-                           @RequestParam("email") String email){
+                           @RequestParam("email") String email,
+                           @RequestParam("privateKey") String privateKey){
         try{
+            Transfer transfer = ContractService.getTransfer(privateKey);
             transfer.registerJudge(name, "", location, phone, email);
             return new Result(1,"仲裁机构认证成功");
         }catch (Exception e){
@@ -39,10 +41,12 @@ public class JudgeController {
      * 版权查询
      * 响应点击搜索按钮
      */
-    @RequestMapping("/")
+    @RequestMapping("/api/3")
     public Result<RecordInformation> SearchingRecord(@RequestParam("musicName") String musicName,
-                                                     @RequestParam("singer") String singer){
+                                                     @RequestParam("singer") String singer,
+                                                     @RequestParam("privateKey") String privateKey){
         try{
+            Transfer transfer = ContractService.getTransfer(privateKey);
             Music music = transfer.searchMusic(musicName, singer);
             User user = transfer.getUserByAddress(music.getOwner());
             RecordInformation recordInformation = new RecordInformation(music,user);
@@ -64,9 +68,10 @@ public class JudgeController {
     /**
      * 机构信息
      */
-    @RequestMapping("/")
-    public Result<User> JudgeInformation(){
+    @RequestMapping("/api/4")
+    public Result<User> JudgeInformation(@RequestParam("privateKey") String privateKey){
         try{
+            Transfer transfer = ContractService.getTransfer(privateKey);
             User user = transfer.getUser();
             return new Result<User>(1,"机构信息返回成功",user);
         }catch (Exception e){
