@@ -30,17 +30,19 @@ public class LoginController {
      * 响应点击注册按钮
      */
     @RequestMapping("/api/5")
-    public List<String> Register(@RequestParam("name") String name,
+    public Result Register(@RequestParam("name") String name,
                                  @RequestParam("phone") String phone){
-        List<String> result = CreateUser.createRomdonUser();
-        try{
-            Transfer transfer = ContractService.getTransfer(result.get(0));
-            transfer.registerUser(name, phone);
 
-            return result;
+        log.info("name:" + name);
+        log.info("phone:" + phone);
+        try{
+            List<String> temp = CreateUser.createRomdonUser();
+            Transfer transfer = ContractService.getTransfer(temp.get(0));
+            transfer.registerUser(name,phone);
+            return new Result(1,"用户注册成功", temp);
         }catch (Exception e){
             e.printStackTrace();
-            return null;
+            return new Result(0,"用户注册失败");
         }
     }
 
