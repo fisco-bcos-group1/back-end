@@ -144,7 +144,7 @@ public class UserController {
      * @param mname
      * @param alltime 所有时间，beg_time # end_time # modified
      */
-    @RequestMapping("/api/16")
+    @RequestMapping("/api/publish")
     public Result MusicRegister(@RequestParam("bin") String bin,
                                 @RequestParam("mname") String mname,
                                 @RequestParam("alltime")String alltime,
