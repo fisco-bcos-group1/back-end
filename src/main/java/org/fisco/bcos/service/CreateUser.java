@@ -27,8 +27,8 @@ public class CreateUser {
          //账户公钥
         String publicKey = credentials.getEcKeyPair().getPublicKey().toString(16);
 
+        keys.add(address);
         keys.add(privateKey);
-        keys.add(publicKey);
         return keys;
     }
 }
