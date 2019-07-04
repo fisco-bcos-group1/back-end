@@ -6,11 +6,13 @@ import org.fisco.bcos.entity.User;
 import org.fisco.bcos.function.Transfer;
 import org.fisco.bcos.service.ContractService;
 import org.fisco.bcos.service.CreateUser;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用于用户注册页面
@@ -30,9 +32,9 @@ public class LoginController {
      * 响应点击注册按钮
      */
     @RequestMapping("/api/5")
-    public Result Register(@RequestParam("name") String name,
-                                 @RequestParam("phone") String phone){
-
+    public Result Register(@RequestBody Map<String,Object> request){
+        String name = (String)request.get("name");
+        String phone = (String)request.get("phone");
         log.info("name:" + name);
         log.info("phone:" + phone);
         try{
@@ -51,7 +53,8 @@ public class LoginController {
      */
     // 这里没有对私钥正确性进行检测
     @RequestMapping("/api/6")
-    public Result Login(@RequestParam("privateKey") String privateKey){
+    public Result Login(@RequestBody Map<String,String> request){
+        String privateKey = request.get("privateKey");
         log.info("privateKey:" + privateKey);
         try{
             Transfer transfer = ContractService.getTransfer(privateKey);

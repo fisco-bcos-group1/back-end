@@ -3,6 +3,7 @@ package org.fisco.bcos.controller;
 import org.fisco.bcos.entity.*;
 import org.fisco.bcos.function.Transfer;
 import org.fisco.bcos.service.ContractService;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -28,8 +30,9 @@ public class UserController {
     // 用户信息
     // 可用于企业、音乐人、普通用户
     @RequestMapping("/api/11")
-    public Result enterpriseInformation(@RequestParam("privateKey") String privateKey){
+    public Result enterpriseInformation(@RequestBody Map<String,String> request){
         try{
+            String privateKey = request.get("privateKey");
             Transfer transfer = ContractService.getTransfer(privateKey);
             User user = transfer.getUser();
             return new Result(1,"用户信息返回成功",user);
@@ -48,8 +51,9 @@ public class UserController {
     // 显示由我发出的所有Notice
     // 这里的list循坏不知道能不能成功，因为返回的只是list，我并不知道数据的具体类型
     @RequestMapping("/api/12")
-    public Result ShowNoticeStartByMe(@RequestParam("privateKey") String privateKey){
+    public Result ShowNoticeStartByMe(@RequestBody Map<String,String> request){
         try{
+            String privateKey = request.get("privateKey");
             Transfer transfer = ContractService.getTransfer(privateKey);
             List<Notice> result = new ArrayList<Notice>();
             List<BigInteger> list = transfer.getNoticeNumberByStart();
@@ -75,8 +79,9 @@ public class UserController {
      * @return
      */
     @RequestMapping("/api/13")
-    public Result ShowMuiscOwnedByMe(@RequestParam("privateKey") String privateKey){
+    public Result ShowMuiscOwnedByMe(@RequestBody Map<String,String> request){
         try{
+            String privateKey = request.get("privateKey");
             Transfer transfer = ContractService.getTransfer(privateKey);
             List<Music>  result = new ArrayList<Music> ();
             List<BigInteger> list = transfer.getMusicNumber();
@@ -93,17 +98,18 @@ public class UserController {
 
     /**
      * 应用于版权转让
-     * @param to 即页面上由用户输入的公钥
-     * @param bin 记录音乐二进制文件的hash
-     * @param alltime 所有时间，beg_time # end_time # modified 这里需要拼接
+     *  to 即页面上由用户输入的公钥
+     *  bin 记录音乐二进制文件的hash
+     *  alltime 所有时间，beg_time # end_time # modified 这里需要拼接
      * @return
      */
     @RequestMapping("/api/14")
-    public Result RecordTransfer(@RequestParam("to") String to,
-                                 @RequestParam("bin") String bin,
-                                 @RequestParam("alltime") String alltime,
-                                 @RequestParam("privateKey")String privateKey){
+    public Result RecordTransfer(@RequestBody Map<String,Object> request){
         try{
+            String to = (String)request.get("to");
+            String bin = (String)request.get("bin");
+            String alltime = (String)request.get("alltime");
+            String privateKey = (String)request.get("privateKey");
             Transfer transfer = ContractService.getTransfer(privateKey);
             transfer.transferMusic(to,bin,alltime);
             return new Result(1,"版权转让成功");
@@ -116,15 +122,16 @@ public class UserController {
 
     /**
      * 用于注销音乐版权
-     * @param bin
-     * @param alltime
+     *  bin
+     *  alltime
      * @return
      */
     @RequestMapping("/api/15")
-    public Result CancelMusic(@RequestParam("bin") String bin,
-                              @RequestParam("alltime") String alltime,
-                              @RequestParam("privateKey")String privateKey){
+    public Result CancelMusic(@RequestBody Map<String,Object> request){
         try{
+            String bin = (String)request.get("bin");
+            String alltime = (String)request.get("alltime");
+            String privateKey = (String)request.get("privateKey");
             Transfer transfer = ContractService.getTransfer(privateKey);
             transfer.cancelMusic(bin,alltime);
             return new Result(1,"注销版权成功");
@@ -140,16 +147,17 @@ public class UserController {
     //登记版权
     /**
      * 用于响应登记版权
-     * @param bin 记录音乐二进制文件的hash
-     * @param mname
-     * @param alltime 所有时间，beg_time # end_time # modified
+     *  bin 记录音乐二进制文件的hash
+     *  mname
+     *  alltime 所有时间，beg_time # end_time # modified
      */
     @RequestMapping("/api/16")
-    public Result MusicRegister(@RequestParam("bin") String bin,
-                                @RequestParam("mname") String mname,
-                                @RequestParam("alltime")String alltime,
-                                @RequestParam("privateKey")String privateKey){
+    public Result MusicRegister(@RequestBody Map<String,Object> request){
         try{
+            String bin = (String)request.get("bin");
+            String mname = (String)request.get("mName");
+            String alltime = (String)request.get("alltime");
+            String privateKey = (String)request.get("privateKey");
             Transfer transfer = ContractService.getTransfer(privateKey);
             transfer.registerMusic(bin,mname,alltime);
             return new Result(1,"版权登革成功");
@@ -168,8 +176,9 @@ public class UserController {
      * @return
      */
     @RequestMapping("/api/17")
-    public Result ShowNotice(@RequestParam("privateKey")String privateKey){
+    public Result ShowNotice(@RequestBody Map<String,String> request){
         try{
+            String privateKey = request.get("privateKey");
             Transfer transfer = ContractService.getTransfer(privateKey);
             List<Notice> result = new ArrayList<Notice>();
             List<BigInteger> list = transfer.getNoticeNumberByTO();
@@ -186,23 +195,24 @@ public class UserController {
 
     /**
      * 用于点击确定授权
-     * @param bin
-     * @param alltime 所有时间，beg_time # end_time # modified 这里需要拼接
-     * @param to
-     * @param music
-     * @param info
-     * @param numberOfNotice 这个用来消费notice，一定要是BigInteger类型，应该是由网页返回
+     *  bin
+     *  alltime 所有时间，beg_time # end_time # modified 这里需要拼接
+     *  to
+     *  music
+     *  info
+     *  numberOfNotice 这个用来消费notice，一定要是BigInteger类型，应该是由网页返回
      * @return
      */
     @RequestMapping("/api/18")
-    public Result AuthorizeMusic(@RequestParam("bin") String bin,
-                                 @RequestParam("alltime") String alltime,
-                                 @RequestParam("to") String to,
-                                 @RequestParam("music")String music,
-                                 @RequestParam("info")String info,
-                                 @RequestParam("NoticeNumber") BigInteger numberOfNotice,
-                                 @RequestParam("privateKey")String privateKey){
+    public Result AuthorizeMusic(@RequestBody Map<String,Object> request){
         try{
+            String bin = (String)request.get("bin");
+            String alltime = (String)request.get("alltime");
+            String to = (String)request.get("to");
+            String music = (String)request.get("music");
+            String info = (String)request.get("info");
+            BigInteger numberOfNotice = new BigInteger((String)request.get("NoticeNumber"));
+            String privateKey = (String)request.get("privateKey");
             Transfer transfer = ContractService.getTransfer(privateKey);
             transfer.authorizeMusic(to,bin,alltime,music,info);
             transfer.consumeNotice(numberOfNotice);

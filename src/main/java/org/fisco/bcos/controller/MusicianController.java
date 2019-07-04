@@ -4,9 +4,12 @@ import org.fisco.bcos.entity.Result;
 import org.fisco.bcos.function.Transfer;
 import org.fisco.bcos.service.ContractService;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 /**
  * 用于响应音乐人界面
@@ -19,21 +22,22 @@ public class MusicianController {
 
     /**
      * 响应音乐人注册
-     * @param name
-     * @param id
-     * @param location
-     * @param phone
-     * @param email
+     *  name
+     *  id
+     *  location
+     *  phone
+     *  email
      * @throws Exception
      */
     @RequestMapping("/api/10")
-    public Result RegisterMusician(@RequestParam("name") String name,
-                                  @RequestParam("id") String id,
-                                  @RequestParam("location") String location,
-                                  @RequestParam("phone") String phone,
-                                  @RequestParam("email") String email,
-                                           @RequestParam("privateKey")String privateKey){
+    public Result RegisterMusician(@RequestBody Map<String,Object> request){
         try{
+            String name = (String)request.get("name");
+            String id = (String)request.get("id");
+            String location = (String)request.get("location");
+            String phone = (String)request.get("phone");
+            String email = (String)request.get("email");
+            String privateKey = (String)request.get("privateKey");
             Transfer transfer = ContractService.getTransfer(privateKey);
             transfer.registerMusician(name,phone,id,location,email);
             return new Result(1,"音乐人注册成功",null);

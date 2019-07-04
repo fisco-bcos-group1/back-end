@@ -4,9 +4,12 @@ import org.fisco.bcos.entity.Result;
 import org.fisco.bcos.function.Transfer;
 import org.fisco.bcos.service.ContractService;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 @Controller
 public class CompanyController {
@@ -17,21 +20,17 @@ public class CompanyController {
 
     /**
      * 响应企业认证
-     * @param name
-     * @param id
-     * @param location
-     * @param phone
-     * @param email
      * @return
      */
     @RequestMapping("/api/1")
-    public Result RegisterCompany(@RequestParam("name") String name,
-                                  @RequestParam("id") String id,
-                                  @RequestParam("location") String location,
-                                  @RequestParam("phone") String phone,
-                                  @RequestParam("email") String email,
-                                  @RequestParam("privateKey") String privateKey){
+    public Result RegisterCompany(@RequestBody Map<String,Object> request){
         try{
+            String name = (String)request.get("name");
+            String id = (String)request.get("id");
+            String location = (String)request.get("location");
+            String phone = (String)request.get("phone");
+            String email = (String)request.get("email");
+            String privateKey = (String)request.get("privateKey");
             Transfer transfer = ContractService.getTransfer(privateKey);
             transfer.registerCompany(name,id,location,phone,email);
             return new Result(1,"企业认证成功");
