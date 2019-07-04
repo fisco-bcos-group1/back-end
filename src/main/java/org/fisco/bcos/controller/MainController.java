@@ -35,7 +35,7 @@ public class MainController {
             String privateKey = (String)request.get("privateKey");
             Transfer transfer = ContractService.getTransfer(privateKey);
             Music music = transfer.searchMusic(mName, singer);
-            return new Result(1,"歌曲搜索成功",music);
+            return new Result(1,"歌曲搜索成功", music);
         }catch(Exception e){
             e.printStackTrace();
             return new Result(0,"歌曲搜索失败");

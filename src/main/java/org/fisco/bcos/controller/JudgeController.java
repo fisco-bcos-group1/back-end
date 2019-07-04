@@ -27,13 +27,13 @@ public class JudgeController {
     public Result Register(@RequestBody Map<String,Object> request){
         try{
             String name = (String)request.get("name");
-            String id = (String)request.get("id");
+//            String id = (String)request.get("id");
             String location = (String)request.get("location");
             String phone = (String)request.get("phone");
             String email = (String)request.get("email");
             String privateKey = (String)request.get("privateKey");
             Transfer transfer = ContractService.getTransfer(privateKey);
-            transfer.registerJudge(name, "", location, phone, email);
+            transfer.registerJudge(name, phone,"", location, email);
             return new Result(1,"仲裁机构认证成功");
         }catch (Exception e){
             e.printStackTrace();

@@ -39,7 +39,7 @@ public class LoginController {
         log.info("phone:" + phone);
         try{
             List<String> temp = CreateUser.createRomdonUser();
-            Transfer transfer = ContractService.getTransfer(temp.get(0));
+            Transfer transfer = ContractService.getTransfer(temp.get(1));
             transfer.registerUser(name,phone);
             return new Result(1,"用户注册成功", temp);
         }catch (Exception e){

@@ -50,7 +50,7 @@ public class UserController {
     // 授权订单
     // 显示由我发出的所有Notice
     // 这里的list循坏不知道能不能成功，因为返回的只是list，我并不知道数据的具体类型
-    @RequestMapping("/api/notices")
+    @RequestMapping("/api/orders")
     public Result ShowNoticeStartByMe(@RequestBody Map<String,String> request){
         try{
             String privateKey = request.get("privateKey");
@@ -137,7 +137,7 @@ public class UserController {
             return new Result(1,"注销版权成功");
         }catch (Exception e){
             e.printStackTrace();
-            return new Result(0,"版权转让失败");
+            return new Result(0,"注销版权失败");
         }
     }
 
@@ -160,7 +160,7 @@ public class UserController {
             String privateKey = (String)request.get("privateKey");
             Transfer transfer = ContractService.getTransfer(privateKey);
             transfer.registerMusic(bin,mname,alltime);
-            return new Result(1,"版权登革成功");
+            return new Result(1,"版权登记成功");
         }catch (Exception e){
             e.printStackTrace();
             return new Result(0,"版权登记失败");
@@ -175,7 +175,7 @@ public class UserController {
      * 显示所有发给我的Notice，即我是接收者
      * @return
      */
-    @RequestMapping("/api/receive")
+    @RequestMapping("/api/receiver")
     public Result ShowNotice(@RequestBody Map<String,String> request){
         try{
             String privateKey = request.get("privateKey");
@@ -186,7 +186,7 @@ public class UserController {
             for (int i = 0; i<size;++i){
                 result.add(transfer.getNotice(list.get(i)));
             }
-            return new Result(1,"获取所有notice成功",result);
+            return new Result(1,"获取所有Notice成功",result);
         }catch (Exception e){
             e.printStackTrace();
             return new Result(0,"获取所有Notice失败");
