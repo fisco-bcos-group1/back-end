@@ -24,7 +24,7 @@ public class MainController {
     /**
      *搜索
      */
-    @RequestMapping("/api/7")
+    @RequestMapping("/api/search")
     public Result Search(@RequestParam("mName") String mName,
                                @RequestParam("singer") String singer,
                                 @RequestParam("privateKey") String privateKey){
@@ -42,10 +42,10 @@ public class MainController {
      * 点击申请授权
      * 应该是网页跳转，没有数据交互
      */
-    @RequestMapping("/api/8")
-    public void Authorize(){
-
-    }
+//    @RequestMapping("/api/8")
+//    public void Authorize(){
+//
+//    }
 
     /**
      * 响应确定申请授权
@@ -56,7 +56,7 @@ public class MainController {
      * @return
      */
 
-    @RequestMapping("/api/9")
+    @RequestMapping("/api/apply")
     public Result ConfirmAuthorize(@RequestParam("music") String music,
                                    @RequestParam("to") String to,
                                    @RequestParam("info") String info,

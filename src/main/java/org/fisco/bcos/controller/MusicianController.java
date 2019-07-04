@@ -26,7 +26,7 @@ public class MusicianController {
      * @param email
      * @throws Exception
      */
-    @RequestMapping("/api/10")
+    @RequestMapping("/api/musician")
     public Result RegisterMusician(@RequestParam("name") String name,
                                   @RequestParam("id") String id,
                                   @RequestParam("location") String location,
