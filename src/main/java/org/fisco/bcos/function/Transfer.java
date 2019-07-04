@@ -1,13 +1,19 @@
 package org.fisco.bcos.function;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.fisco.bcos.autoconfigure.GroupChannelConnectionsPropertyConfig;
+import org.fisco.bcos.autoconfigure.ServiceConfig;
 import org.fisco.bcos.channel.client.Service;
+import org.fisco.bcos.channel.handler.GroupChannelConnectionsConfig;
+import org.fisco.bcos.constants.ConnectConstants;
 import org.fisco.bcos.constants.GasConstants;
 import org.fisco.bcos.contracts.MusicChain;
 import org.fisco.bcos.entity.Music;
 import org.fisco.bcos.entity.Notice;
 import org.fisco.bcos.entity.Record;
 import org.fisco.bcos.entity.User;
+import org.fisco.bcos.service.Atool;
 import org.fisco.bcos.web3j.crypto.Credentials;
 import org.fisco.bcos.web3j.crypto.gm.GenCredential;
 import org.fisco.bcos.web3j.protocol.Web3j;
@@ -17,8 +23,10 @@ import org.fisco.bcos.web3j.tuples.generated.Tuple6;
 import org.fisco.bcos.web3j.tx.gas.StaticGasProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -27,16 +35,42 @@ import java.util.List;
 // transer function which in the contract into java version
 
 //不太清楚这个data注释有没有用
-@Configuration
+@Slf4j
+@org.springframework.stereotype.Service
 public class Transfer {
 
-    //@Autowired private Web3j web3j;
-    @Autowired private Service service;
+    private static Web3j _web3j;
+    private static Service _service;
     //@Autowired private Credentials credentials;
     //private String privateKey;
-    private static MusicChain musicChain;
+    private MusicChain musicChain;
 
     public Transfer(){
+    }
+
+    public static Service getService(){
+        if (_service == null) {
+            ApplicationContext context = Atool.getApplicationContext();
+            _service = context.getBean(Service.class);
+            try {
+                _service.run();
+            }catch (Exception e){
+                e.printStackTrace();
+                return null;
+            }
+        }
+        return _service;
+    }
+
+    public static Web3j getWeb3j() {
+        if (_web3j == null){
+            Service service = getService();
+            ChannelEthereumService channelEthereumService = new ChannelEthereumService();
+            channelEthereumService.setChannelService(service);
+            channelEthereumService.setTimeout(10000);
+            _web3j = Web3j.build(channelEthereumService, service.getGroupId());
+        }
+        return _web3j;
     }
 
     // deploy the contraction
@@ -45,14 +79,8 @@ public class Transfer {
 
         //读取配置文件，sdk与区块链节点建立连接，获取web3j对象
         //这个配置文件要再调整
-        //ApplicationContext context = new ClassPathXmlApplicationContext("src/main/resources/application.xml");
-        //Service service = context.getBean(Service.class);
-        //Service service = new Service();
-        service.run();
-        ChannelEthereumService channelEthereumService = new ChannelEthereumService();
-        channelEthereumService.setChannelService(service);
-        channelEthereumService.setTimeout(10000);
-        Web3j web3j = Web3j.build(channelEthereumService, service.getGroupId());
+
+        Web3j web3j = getWeb3j();
 
         //指定外部账户私钥，用于交易签名
         Credentials credentials = GenCredential.create(privateKey);
@@ -243,6 +271,7 @@ public class Transfer {
     public User getUser()throws Exception{
         User user = new User();
         Tuple6<String, String, String, String, String, String> temp = musicChain.getUser().send();
+        log.info(musicChain.getUser().send().toString());
         user.setName(temp.getValue1());
         user.setType(temp.getValue2());
         user.setId(temp.getValue3());

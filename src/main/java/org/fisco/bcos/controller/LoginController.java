@@ -1,5 +1,6 @@
 package org.fisco.bcos.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.fisco.bcos.entity.Result;
 import org.fisco.bcos.entity.User;
 import org.fisco.bcos.function.Transfer;
@@ -15,6 +16,7 @@ import java.util.List;
  * 用于用户注册页面
  */
 @RestController
+@Slf4j
 public class LoginController {
 
     // 用户私钥
@@ -30,6 +32,8 @@ public class LoginController {
     @RequestMapping("/api/5")
     public List<String> Register(@RequestParam("name") String name,
                                  @RequestParam("phone") String phone){
+        log.info("name:" + name);
+        log.info("phone:" + phone);
         return CreateUser.createRomdonUser();
     }
 
@@ -39,10 +43,12 @@ public class LoginController {
     // 这里没有对私钥正确性进行检测
     @RequestMapping("/api/6")
     public Result Login(@RequestParam("privateKey") String privateKey){
+        log.info("privateKey:" + privateKey);
         try{
             Transfer transfer = ContractService.getTransfer(privateKey);
             User user = transfer.getUser();
-            return new Result<User>(1,"登陆成功",user);
+            log.info(user.getName());
+            return new Result<User>(1,"登陆成功", user);
         }catch (Exception e){
             e.printStackTrace();
             return new Result(0,e.getMessage());
