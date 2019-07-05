@@ -1,5 +1,6 @@
 package org.fisco.bcos.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.fisco.bcos.entity.Music;
 import org.fisco.bcos.entity.Result;
 import org.fisco.bcos.entity.User;
@@ -15,7 +16,7 @@ import java.util.Map;
 /**
  * 响应音乐区，即index
  */
-
+@Slf4j
 @RestController
 public class MainController {
 
@@ -27,7 +28,7 @@ public class MainController {
     /**
      *搜索
      */
-    @RequestMapping("/api/7")
+    @RequestMapping("/api/search")
     public Result Search(@RequestBody Map<String,Object> request){
         try {
             String mName = (String)request.get("mName");
@@ -35,7 +36,8 @@ public class MainController {
             String privateKey = (String)request.get("privateKey");
             Transfer transfer = ContractService.getTransfer(privateKey);
             Music music = transfer.searchMusic(mName, singer);
-            return new Result(1,"歌曲搜索成功",music);
+            log.info(music.toString());
+            return new Result(1,"歌曲搜索成功", music);
         }catch(Exception e){
             e.printStackTrace();
             return new Result(0,"歌曲搜索失败");
@@ -46,10 +48,10 @@ public class MainController {
      * 点击申请授权
      * 应该是网页跳转，没有数据交互
      */
-    @RequestMapping("/api/8")
-    public void Authorize(){
-
-    }
+//    @RequestMapping("/api/8")
+//    public void Authorize(){
+//
+//    }
 
     /**
      * 响应确定申请授权
@@ -60,7 +62,7 @@ public class MainController {
      * @return
      */
 
-    @RequestMapping("/api/9")
+    @RequestMapping("/api/apply")
     public Result ConfirmAuthorize(@RequestBody Map<String,Object> request){
         try{
             String music = (String)request.get("music");
@@ -68,6 +70,7 @@ public class MainController {
             String info = (String)request.get("info");
             String privateKey = (String)request.get("privateKey");
             Transfer transfer = ContractService.getTransfer(privateKey);
+            log.info(to + "------------------------------");
             transfer.registerNotice(to,music,info);
             return new Result(1,"提交申请授权成功");
         }catch (Exception e){

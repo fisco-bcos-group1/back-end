@@ -21,6 +21,17 @@ public class Music {
         this.alltime = alltime;
     }
 
+    @Override
+    public String toString() {
+        return "Music{" +
+                "mName='" + mName + '\'' +
+                ", singer='" + singer + '\'' +
+                ", owner='" + owner + '\'' +
+                ", bin='" + bin + '\'' +
+                ", isValid=" + isValid +
+                ", alltime='" + alltime + '\'' +
+                '}';
+    }
 
     public Music() {
     }

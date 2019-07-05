@@ -29,7 +29,7 @@ public class MusicianController {
      *  email
      * @throws Exception
      */
-    @RequestMapping("/api/10")
+    @RequestMapping("/api/musician")
     public Result RegisterMusician(@RequestBody Map<String,Object> request){
         try{
             String name = (String)request.get("name");

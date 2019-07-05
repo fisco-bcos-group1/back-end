@@ -1,5 +1,6 @@
 package org.fisco.bcos.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.fisco.bcos.entity.Result;
 import org.fisco.bcos.function.Transfer;
 import org.fisco.bcos.service.ContractService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
+@Slf4j
 @Controller
 public class CompanyController {
 
@@ -22,7 +24,7 @@ public class CompanyController {
      * 响应企业认证
      * @return
      */
-    @RequestMapping("/api/1")
+    @RequestMapping("/api/company")
     public Result RegisterCompany(@RequestBody Map<String,Object> request){
         try{
             String name = (String)request.get("name");
@@ -32,6 +34,7 @@ public class CompanyController {
             String email = (String)request.get("email");
             String privateKey = (String)request.get("privateKey");
             Transfer transfer = ContractService.getTransfer(privateKey);
+            log.info(email+"-------------------------------");
             transfer.registerCompany(name,id,location,phone,email);
             return new Result(1,"企业认证成功");
         }catch (Exception e){

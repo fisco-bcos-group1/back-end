@@ -1,5 +1,6 @@
 package org.fisco.bcos.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.fisco.bcos.entity.*;
 import org.fisco.bcos.function.Transfer;
 import org.fisco.bcos.service.ContractService;
@@ -17,6 +18,7 @@ import java.util.Map;
 /**
  * 用于相应个人中心
  */
+@Slf4j
 @RestController
 public class UserController {
 
@@ -29,7 +31,7 @@ public class UserController {
 
     // 用户信息
     // 可用于企业、音乐人、普通用户
-    @RequestMapping("/api/11")
+    @RequestMapping("/api/info")
     public Result enterpriseInformation(@RequestBody Map<String,String> request){
         try{
             String privateKey = request.get("privateKey");
@@ -50,7 +52,7 @@ public class UserController {
     // 授权订单
     // 显示由我发出的所有Notice
     // 这里的list循坏不知道能不能成功，因为返回的只是list，我并不知道数据的具体类型
-    @RequestMapping("/api/12")
+    @RequestMapping("/api/orders")
     public Result ShowNoticeStartByMe(@RequestBody Map<String,String> request){
         try{
             String privateKey = request.get("privateKey");
@@ -61,6 +63,7 @@ public class UserController {
             for (int i = 0; i<size;++i){
                 result.add(transfer.getNotice(list.get(i)));
             }
+            log.info(result.toString());
             return new Result(1,"获取所有notice成功",result);
         }catch (Exception e){
             e.printStackTrace();
@@ -78,17 +81,23 @@ public class UserController {
      * 显示所有拥有者为我的音乐
      * @return
      */
-    @RequestMapping("/api/13")
+    @RequestMapping("/api/musics")
     public Result ShowMuiscOwnedByMe(@RequestBody Map<String,String> request){
         try{
             String privateKey = request.get("privateKey");
             Transfer transfer = ContractService.getTransfer(privateKey);
             List<Music>  result = new ArrayList<Music> ();
             List<BigInteger> list = transfer.getMusicNumber();
-            int size = list.size();
+            int size = 0;
+            size = list.size();
+            //String temp = String.valueOf(size);
+            //log.info("the size is "+temp);
             for (int i = 0; i<size;++i){
-                result.add(transfer.getMusic(list.get(i)));
+                Music newMusic = transfer.getMusic(list.get(i));
+                log.info(newMusic.toString()+ "==============", i);
+                result.add(newMusic);
             }
+            log.info(result.toString());
             return new Result(1,"获取所有我的音乐成功",result);
         }catch (Exception e){
             e.printStackTrace();
@@ -103,7 +112,7 @@ public class UserController {
      *  alltime 所有时间，beg_time # end_time # modified 这里需要拼接
      * @return
      */
-    @RequestMapping("/api/14")
+    @RequestMapping("/api/transfer")
     public Result RecordTransfer(@RequestBody Map<String,Object> request){
         try{
             String to = (String)request.get("to");
@@ -126,7 +135,7 @@ public class UserController {
      *  alltime
      * @return
      */
-    @RequestMapping("/api/15")
+    @RequestMapping("/api/cancel")
     public Result CancelMusic(@RequestBody Map<String,Object> request){
         try{
             String bin = (String)request.get("bin");
@@ -137,7 +146,7 @@ public class UserController {
             return new Result(1,"注销版权成功");
         }catch (Exception e){
             e.printStackTrace();
-            return new Result(0,"版权转让失败");
+            return new Result(0,"注销版权失败");
         }
     }
 
@@ -151,16 +160,16 @@ public class UserController {
      *  mname
      *  alltime 所有时间，beg_time # end_time # modified
      */
-    @RequestMapping("/api/16")
+    @RequestMapping("/api/publish")
     public Result MusicRegister(@RequestBody Map<String,Object> request){
         try{
             String bin = (String)request.get("bin");
-            String mname = (String)request.get("mName");
+            String mname = (String)request.get("mname");
             String alltime = (String)request.get("alltime");
             String privateKey = (String)request.get("privateKey");
             Transfer transfer = ContractService.getTransfer(privateKey);
             transfer.registerMusic(bin,mname,alltime);
-            return new Result(1,"版权登革成功");
+            return new Result(1,"版权登记成功");
         }catch (Exception e){
             e.printStackTrace();
             return new Result(0,"版权登记失败");
@@ -175,7 +184,7 @@ public class UserController {
      * 显示所有发给我的Notice，即我是接收者
      * @return
      */
-    @RequestMapping("/api/17")
+    @RequestMapping("/api/receiver")
     public Result ShowNotice(@RequestBody Map<String,String> request){
         try{
             String privateKey = request.get("privateKey");
@@ -186,7 +195,8 @@ public class UserController {
             for (int i = 0; i<size;++i){
                 result.add(transfer.getNotice(list.get(i)));
             }
-            return new Result(1,"获取所有notice成功",result);
+            log.info(result.toString()+"------------------showNotice");
+            return new Result(1,"获取所有Notice成功",result);
         }catch (Exception e){
             e.printStackTrace();
             return new Result(0,"获取所有Notice失败");
@@ -203,7 +213,7 @@ public class UserController {
      *  numberOfNotice 这个用来消费notice，一定要是BigInteger类型，应该是由网页返回
      * @return
      */
-    @RequestMapping("/api/18")
+    @RequestMapping("/api/confirm")
     public Result AuthorizeMusic(@RequestBody Map<String,Object> request){
         try{
             String bin = (String)request.get("bin");
@@ -228,7 +238,7 @@ public class UserController {
 
 
     // 版权共享
-    @RequestMapping("/api/19")
+    @RequestMapping("/api/share")
     public void RecordShare(){
 
     }

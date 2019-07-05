@@ -31,7 +31,7 @@ public class LoginController {
     /**
      * 响应点击注册按钮
      */
-    @RequestMapping("/api/5")
+    @RequestMapping("/api/register")
     public Result Register(@RequestBody Map<String,Object> request){
         String name = (String)request.get("name");
         String phone = (String)request.get("phone");
@@ -39,7 +39,7 @@ public class LoginController {
         log.info("phone:" + phone);
         try{
             List<String> temp = CreateUser.createRomdonUser();
-            Transfer transfer = ContractService.getTransfer(temp.get(0));
+            Transfer transfer = ContractService.getTransfer(temp.get(1));
             transfer.registerUser(name,phone);
             return new Result(1,"用户注册成功", temp);
         }catch (Exception e){
@@ -52,7 +52,8 @@ public class LoginController {
      * 响应点击登陆
      */
 
-    @RequestMapping("/api/6")
+    // 这里没有对私钥正确性进行检测
+    @RequestMapping("/api/login")
     public Result Login(@RequestBody Map<String,String> request){
         String privateKey = request.get("privateKey");
         log.info("privateKey:" + privateKey);

@@ -23,17 +23,17 @@ public class JudgeController {
     /**
      * 响应申请认证仲裁机构
      */
-    @RequestMapping("/api/2")
+    @RequestMapping("/api/judgeapply")
     public Result Register(@RequestBody Map<String,Object> request){
         try{
             String name = (String)request.get("name");
-            String id = (String)request.get("id");
+//            String id = (String)request.get("id");
             String location = (String)request.get("location");
             String phone = (String)request.get("phone");
             String email = (String)request.get("email");
             String privateKey = (String)request.get("privateKey");
             Transfer transfer = ContractService.getTransfer(privateKey);
-            transfer.registerJudge(name, "", location, phone, email);
+            transfer.registerJudge(name, phone,"", location, email);
             return new Result(1,"仲裁机构认证成功");
         }catch (Exception e){
             e.printStackTrace();
@@ -45,7 +45,7 @@ public class JudgeController {
      * 版权查询
      * 响应点击搜索按钮
      */
-    @RequestMapping("/api/3")
+    @RequestMapping("/api/judgesearch")
     public Result SearchingRecord(@RequestBody Map<String,Object> request){
         try{
             String musicName = (String)request.get("musicName");
@@ -65,7 +65,7 @@ public class JudgeController {
     /**
      * 历史记录
      */
-    @RequestMapping("/")
+    @RequestMapping("/api/judge/history")
     public void SearchHistory(){
 
     }
@@ -73,7 +73,7 @@ public class JudgeController {
     /**
      * 机构信息
      */
-    @RequestMapping("/api/4")
+    @RequestMapping("/api/judge/info")
     public Result JudgeInformation(@RequestBody Map<String,String> request){
         try{
             String privateKey = request.get("privateKey");

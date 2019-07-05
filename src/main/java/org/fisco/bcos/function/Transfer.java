@@ -119,6 +119,9 @@ public class Transfer {
 
     //music register
     public void registerMusic(String bin, String mname, String alltime) throws Exception{
+        log.info(bin);
+        log.info(mname);
+        log.info(alltime);
         musicChain.registerMusic(bin,mname,alltime).send();
     }
 
@@ -126,8 +129,8 @@ public class Transfer {
         musicChain.cancelMusic(binhash,alltime).send();
     }
 
-    public void registerNotice(String to, String music, String info){
-        musicChain.registerNotice(to,music,info);
+    public void registerNotice(String to, String music, String info)throws Exception{
+        musicChain.registerNotice(to,music,info).send();
     }
 
     public void transferMusic(String to, String binhash, String alltime) throws Exception{
