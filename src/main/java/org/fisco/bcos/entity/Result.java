@@ -11,13 +11,11 @@ public class Result implements Serializable {
      */
     private int success;
 
-
     //返回信息
     private String message;
-
+    // 储存不同类型返回数据
     private Object data;
 
-    //private Object data;
 
     public Result(){
     }

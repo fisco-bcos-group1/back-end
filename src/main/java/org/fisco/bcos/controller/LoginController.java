@@ -51,7 +51,7 @@ public class LoginController {
     /**
      * 响应点击登陆
      */
-    // 这里没有对私钥正确性进行检测
+
     @RequestMapping("/api/6")
     public Result Login(@RequestBody Map<String,String> request){
         String privateKey = request.get("privateKey");

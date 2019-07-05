@@ -44,6 +44,17 @@ public class Record {
         return alltime;
     }
 
+    @Override
+    public String toString() {
+        return "Record{" +
+                "user='" + user + '\'' +
+                ", author='" + author + '\'' +
+                ", alltime='" + alltime + '\'' +
+                ", music='" + music + '\'' +
+                ", info='" + info + '\'' +
+                '}';
+    }
+
     public void setAlltime(String alltime) {
         this.alltime = alltime;
     }

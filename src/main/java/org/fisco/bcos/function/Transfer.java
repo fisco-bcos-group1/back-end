@@ -267,7 +267,6 @@ public class Transfer {
 
      */
 
-    // test only
     public User getUser()throws Exception{
         User user = new User();
         Tuple6<String, String, String, String, String, String> temp = musicChain.getUser().send();

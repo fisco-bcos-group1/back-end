@@ -14,7 +14,7 @@ import static org.junit.Assert.assertTrue;
 public class NoticeTest extends BaseTest {
     @Test
 
-    public void RigisterAndGetMusic() throws Exception {
+    public void Notice() throws Exception {
         List<String> temp = CreateUser.createRomdonUser();
         System.out.println(temp);
         String pk = temp.get(1);

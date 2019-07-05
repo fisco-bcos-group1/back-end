@@ -21,7 +21,7 @@ import static org.junit.Assert.assertTrue;
 public class MusicTest extends BaseTest {
     @Test
 
-    public void RigisterAndGetMusic() throws Exception {
+    public void RegisterAndGetMusic() throws Exception {
         String privateKey = "a3cffe5e24835dd88858bdd1460903c431579d9e5da6dccc45742beb9c103b54";
         Transfer transfer = ContractService.getTransfer(privateKey);
         transfer.registerMusic("bin1","mnane1","alltime1");
@@ -32,7 +32,8 @@ public class MusicTest extends BaseTest {
         Music music0 = transfer.getMusic(number);
 
         // Test getMusicNumber
-        List result = transfer.getMusicNumber();
+        List<BigInteger> result = transfer.getMusicNumber();
+
         System.out.println(result);
         assertTrue("bin1".equals(music0.getBin()));
         //System.out.println(temp);
